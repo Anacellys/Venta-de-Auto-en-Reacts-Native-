@@ -1,98 +1,98 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import {
+  RadioGroup
+} from "@/components/RadioGroup";
+import {
+  ResultadoCard
+} from "@/components/ResultadoCard";
+import {
+  shared
+} from "@/constants/styles";
+import {
+  useVentaAuto
+} from "@/hooks/useVentaAuto";
+import {
+  ScrollView, Text, TextInput, TouchableOpacity
+} from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+export default function VentaAutoScreen() {
 
-export default function HomeScreen() {
+  const {
+    costo, salario, transmision, formaPago, resultado,
+    setCosto, setSalario, setTransmision, setFormaPago,
+    calcular, reiniciar,
+  } = useVentaAuto();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView contentContainerStyle={shared.container}>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <Text style={{ fontSize: 22, fontWeight: "700", textAlign: "center", marginBottom: 8 }}>
+        Venta de Auto
+      </Text>
+
+      {/* Costo */}
+      <Text style={shared.label}>Costo ($)</Text>
+      <TextInput
+        style={shared.input}
+        placeholder="Ej: 15,000.00"
+        keyboardType="decimal-pad"
+        value={costo}
+        onChangeText={setCosto}
+      />
+
+      {/* Transmisión */}
+      <Text style={shared.label}>Transmisión</Text>
+      <RadioGroup
+        opciones={[
+          { valor: "manual",     etiqueta: "Manual" },
+          { valor: "automatica", etiqueta: "Automática  (+$1,500.00)" },
+        ]}
+        valorActual={transmision}
+        onChange={setTransmision}
+      />
+
+      {/* Forma de pago */}
+      <Text style={shared.label}>Forma de pago</Text>
+      <RadioGroup
+        opciones={[
+          { valor: "contado", etiqueta: "Contado" },
+          { valor: "credito", etiqueta: "Crédito" },
+        ]}
+        valorActual={formaPago}
+        onChange={setFormaPago}
+      />
+
+      {/* Salario: SOLO visible si elige crédito */}
+      {formaPago === "credito" && (
+        <>
+          <Text style={shared.label}>Salario mensual ($)</Text>
+          <TextInput
+            style={shared.input}
+            placeholder="Ej: 1,200.00"
+            keyboardType="decimal-pad"
+            value={salario}
+            onChangeText={setSalario}
+          />
+        </>
+      )}
+
+      {/* Botón calcular */}
+      <TouchableOpacity style={shared.boton} onPress={calcular}>
+        <Text style={shared.botonTexto}>Calcular</Text>
+      </TouchableOpacity>
+
+      {/* Resultados */}
+      {resultado && <ResultadoCard resultado={resultado} />}
+
+      {/* Botón reiniciar (solo si ya calculó) */}
+      {resultado && (
+        <TouchableOpacity
+          style={[shared.boton, { marginTop: 12, backgroundColor: "#6b7280" }]}
+          onPress={reiniciar}
+        >
+          <Text style={shared.botonTexto}>Nueva consulta</Text>
+        </TouchableOpacity>
+      )}
+
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
