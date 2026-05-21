@@ -1,50 +1,118 @@
-# Welcome to your Expo app 👋
+# 🚗 Venta de Auto 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Universidad Tecnológica de Panamá**  
+Facultad de Ingeniería de Sistemas Computacionales  
+Departamento de Programación de Computadoras  
+Curso: Desarrollo de Software VI — Profesora: Marlina Sánchez
 
-## Get started
+---
 
-1. Install dependencies
+## Descripción
 
-   ```bash
-   npm install
-   ```
+Aplicación móvil desarrollada en **React Native con Expo** que simula el proceso de venta de un auto. Permite calcular el costo final según el tipo de transmisión y la forma de pago (contado o crédito), aplicando ITBM e interés compuesto según corresponda.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## Funcionalidades
 
-In the output, you'll find options to open the app in a
+- Selección de transmisión: Manual o Automática (+$1,500.00)
+- Dos formas de pago:
+  - **Contado:** aplica solo ITBM del 7%
+  - **Crédito:** aplica interés compuesto del 8% anual a 9 años + ITBM del 7%
+- Campo de salario visible únicamente cuando se selecciona crédito
+- Cálculo de letra mensual (108 cuotas)
+- Verificación de aprobación: si el 30% del salario cubre la letra mensual
+- Botón de reinicio para nueva consulta
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Fórmulas utilizadas
 
-## Get a fresh project
+| Concepto | Fórmula |
+|---|---|
+| Transmisión automática | `precio = costo + 1500` |
+| ITBM | `impuesto = precio × 0.07` |
+| Interés compuesto (crédito) | `Cf = Ci × (1 + 0.08)^9` |
+| Letra mensual | `letra = (Cf + ITBM) / 108` |
+| Límite de aprobación | `30% del salario >= letra` |
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## Tecnologías
+
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/) con Expo Router
+- [Expo Go](https://expo.dev/go) para pruebas en dispositivo físico
+- TypeScript
+- pnpm como gestor de paquetes
+
+---
+
+## Estructura del proyecto
+
+```
+AutoClick/
+├── app/
+│   ├── (tabs)/
+│   │   └── index.tsx        ← pantalla principal
+│   ├── _layout.tsx          ← layout global con tabs
+│   └── modal.tsx
+├── components/
+│   ├── RadioGroup.tsx       ← botones de selección reutilizables
+│   └── ResultadoCard.tsx    ← tarjeta de resultados
+├── constants/
+│   └── styles.ts            ← colores y estilos compartidos
+├── hooks/
+│   └── useVentaAuto.ts      ← lógica y estados del formulario
+├── assets/
+├── .gitignore
+├── app.json
+├── package.json
+└── README.md
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Instalación y ejecución
 
-To learn more about developing your project with Expo, look at the following resources:
+### Requisitos previos
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Node.js v18 o superior
+- pnpm instalado globalmente
+- App **Expo Go** en tu celular (Android o iOS)
+- Celular y computadora en la **misma red Wi-Fi**
 
-## Join the community
+### Pasos
 
-Join our community of developers creating universal apps.
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/tu-usuario/AutoClick.git
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# 2. Entrar a la carpeta
+cd AutoClick
+
+# 3. Instalar dependencias
+pnpm install
+
+# 4. Iniciar el servidor de desarrollo
+pnpm start
+```
+
+Escanea el código QR que aparece en la terminal con la app **Expo Go** desde tu celular.
+
+---
+
+## Subir cambios a GitHub
+
+```bash
+git add .
+git commit -m "descripción del cambio"
+git push origin main
+```
+
+---
+
+## Autora
+
+Anacelis Boniche — Estudiante 
+Universidad Tecnológica de Panamá
